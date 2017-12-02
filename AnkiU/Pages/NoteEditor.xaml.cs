@@ -51,6 +51,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
+using WebImageLibrary;
 using AnkiTemplate = AnkiU.AnkiCore.Templates.Template;
 
 namespace AnkiU.Pages
@@ -586,11 +587,21 @@ namespace AnkiU.Pages
 
         private async Task AddMedia()
         {
-            var file = await UIHelper.OpenFilePicker("AddMediaToken", Media.ALLOWED_EXTENSION);
-            if (file == null)
-                return;
+            //var file = await UIHelper.OpenFilePicker("AddMediaToken", Media.ALLOWED_EXTENSION);
 
-            await TryAddMedia(file);
+            //if (file == null)
+            //return;
+
+            var imageLibraryDialog = new WebImageLibraryDialog();
+            imageLibraryDialog.Finished += async (sender, args) =>
+            {
+                if (args.Result == WebImageLibraryClosedEventArgs.Results.Selected)
+                {
+                    await TryAddMedia(args.File);
+                    await args.File.DeleteAsync();
+                }
+            };            
+            await imageLibraryDialog.ShowAsync();            
         }
 
         private static bool IsMediaFileType(StorageFile file)

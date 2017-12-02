@@ -1015,6 +1015,10 @@
       <Project>{9881be9e-37d1-410a-a8e3-6f4e17f82064}</Project>
       <Name>Shared</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WebImageLibrary\WebImageLibrary.csproj">
+      <Project>{A0E56623-0389-4069-8D38-909BA0D27C05}</Project>
+      <Name>WebImageLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

@@ -1,0 +1,36 @@
+﻿<ContentDialog
+    x:Class="WebImageLibrary.WebImageLibraryDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:WebImageLibrary"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Web image search"
+    PrimaryButtonText="use selected image"
+    SecondaryButtonText="cancel"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
+
+    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Search:</TextBlock>
+            <TextBox x:Name="SearchField" PlaceholderText="enter search text here" KeyUp="SearchField_KeyUp"></TextBox>
+            <Button x:Name="SearchButton" Tapped="SearchButton_Tapped" Click="SearchButton_Click">search</Button>
+        </StackPanel>
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Hidden" HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Auto">
+            <ListBox x:Name="Results" HorizontalAlignment="Stretch" SelectionChanged="Results_OnSelectionChanged">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Image MaxWidth="120" MaxHeight="120" Source="{Binding SmallURL}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </ScrollViewer>
+    </Grid>
+</ContentDialog>
