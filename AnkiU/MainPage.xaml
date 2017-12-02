@@ -9,7 +9,6 @@
     x:Class="AnkiU.MainPage"
     xmlns:data="using:AnkiU.Models"
     x:Name="page"
-    xmlns:canvas="using:Microsoft.Graphics.Canvas.UI.Xaml"
     mc:Ignorable="d" BorderBrush="White" BorderThickness="1" >
 
     <Page.Resources>

@@ -107,9 +107,6 @@
     <Content Include="html\tinymce\img\forecolor.png" />
     <Content Include="html\tinymce\img\selectall.png" />
     <None Include="AnkiCore\Log.txt" />
-    <Content Include="ApplicationInsights.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Assets\AddClozeField.png" />
     <Content Include="Assets\AddClozeNote.png" />
     <Content Include="Assets\AddTypeField.png" />
@@ -221,7 +218,6 @@
     </Content>
     <Content Include="Licenses\Win2D\License.txt" />
     <None Include="AnkiU.ruleset" />
-    <None Include="AnkiU_StoreKey.pfx" />
     <Content Include="html\tinymce\skins\lightgray\fonts\tinymce-small.eot" />
     <Content Include="html\tinymce\skins\lightgray\fonts\tinymce-small.json" />
     <Content Include="html\tinymce\skins\lightgray\fonts\tinymce-small.ttf" />
@@ -231,10 +227,10 @@
     <Content Include="html\tinymce\skins\lightgray\fonts\tinymce.ttf" />
     <Content Include="html\tinymce\skins\lightgray\fonts\tinymce.woff" />
     <None Include="MyResources.res" />
-    <None Include="TestUiCases.txt" />
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="TestUiCases.txt" />
     <Content Include="Assets\Fonts\fira-sans\FiraSans-Bold.otf" />
     <Content Include="Assets\Fonts\fira-sans\FiraSans-BoldItalic.otf" />
     <Content Include="Assets\Fonts\fira-sans\FiraSans-Book.otf" />
@@ -610,13 +606,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="AnkiU_TemporaryKey.pfx" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="html\card.js" />
     <Content Include="html\error.html" />
     <Content Include="html\card.html" />
-    <None Include="Package.StoreAssociation.xml" />
     <Content Include="Properties\Default.rd.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -1027,6 +1019,7 @@
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
+  <PropertyGroup />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
