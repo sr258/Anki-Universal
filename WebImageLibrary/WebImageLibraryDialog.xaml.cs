@@ -51,7 +51,7 @@ namespace WebImageLibrary
 
         public event EventHandler<WebImageLibraryClosedEventArgs> Finished;
 
-        public async Task Open(string query)
+        public async Task SetQuery(string query)
         {
             SearchField.Text = query;
             await Search();
@@ -90,11 +90,16 @@ namespace WebImageLibrary
             IsPrimaryButtonEnabled = e.AddedItems.Any();
         }
 
+        private string CreateFileName(IRepositoryImage image)
+        {
+            return image.Title.Replace(" ", "_");
+        }
+
         private async Task<StorageFile> DownloadToTempFile(IRepositoryImage selectedImage)
         {
             var extension = Path.GetExtension(selectedImage.MediumURL);
             StorageFile tempFile =
-                await ApplicationData.Current.TemporaryFolder.CreateFileAsync("temp_image" + extension,
+                await ApplicationData.Current.TemporaryFolder.CreateFileAsync(CreateFileName(selectedImage) + extension,
                     CreationCollisionOption.ReplaceExisting);
 
             var uri = new Uri(selectedImage.MediumURL);
