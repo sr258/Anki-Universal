@@ -50,6 +50,7 @@ namespace WebImageLibrary
 
         private void SetStartState()
         {
+            IsPrimaryButtonEnabled = false;
             ProgressIndicator.Visibility = Visibility.Collapsed;
             ResultsViewer.Visibility = Visibility.Collapsed;
             NoResultsLabel.Visibility = Visibility.Collapsed;
