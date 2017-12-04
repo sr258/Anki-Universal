@@ -5,26 +5,41 @@
     xmlns:local="using:WebImageLibrary"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d"
     Title="Web image search"
     PrimaryButtonText="use selected image"
     SecondaryButtonText="cancel"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
     SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
-
     <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Search:</TextBlock>
+        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
             <TextBox x:Name="SearchField" PlaceholderText="enter search text here" KeyUp="SearchField_KeyUp"></TextBox>
-            <Button x:Name="SearchButton" Tapped="SearchButton_Tapped" Click="SearchButton_Click">search</Button>
+            <Button x:Name="SearchButton" Grid.Column="1" Tapped="SearchButton_Tapped" Click="SearchButton_Click" Margin="4,0,0,0">
+                <SymbolIcon Symbol="Find"/>
+            </Button>
+        </Grid>
+        <ProgressRing x:Name="ProgressIndicator" Grid.Row="1" IsActive="True"/>
+        <StackPanel x:Name="NoResultsLabel" Grid.Row="1" Orientation="Horizontal"  HorizontalAlignment="Center">
+            <SymbolIcon Symbol="Clear" Foreground="Red" Margin="0,0,4,0"/>
+            <TextBlock VerticalAlignment="Center">no images found</TextBlock>
         </StackPanel>
-        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Hidden" HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Auto">
+        <ScrollViewer x:Name="ResultsViewer" Grid.Row="1" HorizontalScrollBarVisibility="Hidden" HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Auto">
             <ListBox x:Name="Results" HorizontalAlignment="Stretch" SelectionChanged="Results_OnSelectionChanged">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <controls:WrapPanel MaxWidth="480"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Image MaxWidth="120" MaxHeight="120" Source="{Binding SmallURL}"/>

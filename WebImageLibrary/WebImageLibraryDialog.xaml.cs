@@ -29,6 +29,35 @@ namespace WebImageLibrary
         public WebImageLibraryDialog()
         {
             InitializeComponent();
+            SetStartState();
+        }
+
+        private void SetStartState()
+        {
+            ProgressIndicator.Visibility = Visibility.Collapsed;
+            ResultsViewer.Visibility = Visibility.Collapsed;
+            NoResultsLabel.Visibility = Visibility.Collapsed;
+        }
+
+        private void SetSearchingState()
+        {
+            ProgressIndicator.Visibility = Visibility.Visible;
+            ResultsViewer.Visibility = Visibility.Collapsed;
+            NoResultsLabel.Visibility = Visibility.Collapsed;
+        }
+
+        private void SetHasResultsState()
+        {
+            ProgressIndicator.Visibility = Visibility.Collapsed;
+            ResultsViewer.Visibility = Visibility.Visible;
+            NoResultsLabel.Visibility = Visibility.Collapsed;
+        }
+
+        private void SetNoResultsState()
+        {
+            ProgressIndicator.Visibility = Visibility.Collapsed;
+            ResultsViewer.Visibility = Visibility.Collapsed;
+            NoResultsLabel.Visibility = Visibility.Visible;
         }
 
         private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
@@ -59,9 +88,15 @@ namespace WebImageLibrary
 
         private async Task Search()
         {
+            SetSearchingState();
             var result = await _webRepositories.First().Query(SearchField.Text);
             Results.ItemsSource = result;
             IsPrimaryButtonEnabled = false;
+            
+            if(result.Any())
+                SetHasResultsState();
+            else
+                SetNoResultsState();
         }
 
         private async void SearchButton_Tapped(object sender, TappedRoutedEventArgs e)
