@@ -111,6 +111,7 @@
     <Compile Include="WebImageLibraryDialog.xaml.cs">
       <DependentUpon>WebImageLibraryDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WebRepositories\MemoryCachedRepository.cs" />
     <Compile Include="WebRepositories\IRepositoryImage.cs" />
     <Compile Include="WebRepositories\IWebRepository.cs" />
     <Compile Include="WebRepositories\PixabayImage.cs" />
