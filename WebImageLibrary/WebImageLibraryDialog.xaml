@@ -31,8 +31,8 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-            <TextBox x:Name="SearchField" Grid.Column="1" PlaceholderText="enter search text here" KeyUp="SearchField_KeyUp"></TextBox>
-            <Button x:Name="SearchButton" Grid.Column="2" Tapped="SearchButton_Tapped" Click="SearchButton_Click" Margin="4,0,0,0">
+            <TextBox x:Name="SearchField" Grid.Column="1" PlaceholderText="enter search text here" KeyUp="SearchField_KeyUp" TabIndex="1"></TextBox>
+            <Button x:Name="SearchButton" Grid.Column="2" Tapped="SearchButton_Tapped" Click="SearchButton_Click" Margin="4,0,0,0" TabIndex="2">
                 <SymbolIcon Symbol="Find"/>
             </Button>
         </Grid>
@@ -44,17 +44,26 @@
         <ScrollViewer x:Name="ResultsViewer" Grid.Row="1" HorizontalScrollBarVisibility="Hidden" HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Auto"
                       ViewChanged="ResultsViewer_OnViewChanged">
             <StackPanel>
+                <HyperlinkButton x:Name="SourceHyperlinkButton">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock x:Name="SourceTextBlock" Margin="4"/>
+                        <Image Height="24" x:Name="SourceImage"/>
+                    </StackPanel>
+                </HyperlinkButton>
                 <ListBox x:Name="Results" HorizontalAlignment="Stretch" SelectionChanged="Results_OnSelectionChanged" 
                          ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                          ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.HorizontalScrollMode="Disabled">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <controls:WrapPanel MaxWidth="480"/>
+                            <controls:WrapPanel MaxWidth="490"/>
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Image MaxWidth="120" MaxHeight="120" Source="{Binding SmallURL}"/>
+                            <Border Width="120" Height="120">
+                                <Image MaxWidth="120" MaxHeight="120" Source="{Binding SmallURL}"
+                                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            </Border>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>

@@ -36,7 +36,8 @@ namespace WebImageLibrary.WebRepositories
                 {
                     ImageType = ImageType.Illustration | ImageType.Vector,
                     Query = query,
-                    Page = pageNr
+                    Page = pageNr,
+                    Order = Order.Popular
                 });
 
                 if (result == null || result.Images == null || !result.Images.Any())
@@ -60,7 +61,7 @@ namespace WebImageLibrary.WebRepositories
             }
         }
 
-        public string SourceReference => "by pixabay";
+        public string SourceReference => "Images provided by";
         public string SourceURL => "https://pixabay.com";
         public string SourceImageURL => "https://pixabay.com/static/img/logo.png";
     }

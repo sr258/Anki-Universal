@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using Nito.AsyncEx;
 using WebImageLibrary.WebRepositories;
@@ -131,13 +132,16 @@ namespace WebImageLibrary
                 _lastQuery = SearchField.Text;
 
                 IsPrimaryButtonEnabled = false;
+                SourceHyperlinkButton.NavigateUri = new Uri(_lastRepository.SourceURL);
+                SourceTextBlock.Text = _lastRepository.SourceReference;
+                SourceImage.Source = new BitmapImage(new Uri(_lastRepository.SourceImageURL));
 
                 if (result.Item2 > 0)
                     SetHasResultsState();
                 else
                     SetNoResultsState();
 
-                EvaluateShowMore(result.Item2);
+                EvaluateShowMore(result.Item2);                
             }
         }
 
