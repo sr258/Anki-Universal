@@ -41,7 +41,8 @@
             <SymbolIcon Symbol="Clear" Foreground="Red" Margin="0,0,4,0"/>
             <TextBlock VerticalAlignment="Center">no images found</TextBlock>
         </StackPanel>
-        <ScrollViewer x:Name="ResultsViewer" Grid.Row="1" HorizontalScrollBarVisibility="Hidden" HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Auto">
+        <ScrollViewer x:Name="ResultsViewer" Grid.Row="1" HorizontalScrollBarVisibility="Hidden" HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Auto"
+                      ViewChanged="ResultsViewer_OnViewChanged">
             <StackPanel>
                 <ListBox x:Name="Results" HorizontalAlignment="Stretch" SelectionChanged="Results_OnSelectionChanged" 
                          ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -57,9 +58,9 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-                <StackPanel Orientation="Horizontal" x:Name="MoreButton" HorizontalAlignment="Center">
-                    <HyperlinkButton Content="show more" Click="MoreButton_OnClick" VerticalAlignment="Center"/>
-                    <TextBlock x:Name="MoreCount" VerticalAlignment="Center" Margin="4,0,0,0"/>
+                <StackPanel x:Name="LoadingMoreIndicator" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,4,0,4" Visibility="Collapsed">
+                    <ProgressRing IsActive="True" Margin="0,0,8,0"/>
+                    <TextBlock>loading more images...</TextBlock>
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>

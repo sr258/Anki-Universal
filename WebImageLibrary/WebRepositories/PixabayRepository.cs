@@ -32,7 +32,6 @@ namespace WebImageLibrary.WebRepositories
                 return Tuple.Create(new List<IRepositoryImage>() as IEnumerable<IRepositoryImage>, 0);
             try
             {
-                Debug.WriteLine($"querying for {query}...");
                 var result = await _pixabaySharpClient.QueryImagesAsync(new ImageQueryBuilder
                 {
                     ImageType = ImageType.Illustration | ImageType.Vector,
@@ -61,7 +60,7 @@ namespace WebImageLibrary.WebRepositories
             }
         }
 
-        public string SourceReference => "from pixabay";
+        public string SourceReference => "by pixabay";
         public string SourceURL => "https://pixabay.com";
         public string SourceImageURL => "https://pixabay.com/static/img/logo.png";
     }

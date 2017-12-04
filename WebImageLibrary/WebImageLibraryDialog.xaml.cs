@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -17,6 +18,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Nito.AsyncEx;
 using WebImageLibrary.WebRepositories;
 
 // The Content Dialog item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -25,10 +27,16 @@ namespace WebImageLibrary
 {
     public sealed partial class WebImageLibraryDialog : ContentDialog
     {
+        private const double TOLERANCE = 0.00001d;
+
         private readonly IEnumerable<IWebRepository> _webRepositories = RepositoryDirectory.GetWebRepositories();
         private IWebRepository _lastRepository = null;
         private int _lastPage = 0;
+        private string _lastQuery = "";
+        private bool _canShowMore = false;
         private readonly ObservableCollection<IRepositoryImage> _results = new ObservableCollection<IRepositoryImage>();
+        private bool _isQuerying = false;
+        private readonly AsyncLock _queryMutex = new AsyncLock();
 
         public WebImageLibraryDialog()
         {
@@ -102,30 +110,35 @@ namespace WebImageLibrary
 
         private async Task Search()
         {
-            SetSearchingState();
-            _results.Clear();
-            _lastRepository = (SearchProvider.SelectedItem as IWebRepository);
-            if (_lastRepository == null)
+            using (await _queryMutex.LockAsync())
             {
-                SetErrorState();
-                return;
+                SetSearchingState();
+                _results.Clear();
+                _lastRepository = (SearchProvider.SelectedItem as IWebRepository);
+                if (_lastRepository == null)
+                {
+                    SetErrorState();
+                    return;
+                }
+
+                var result = await _lastRepository.Query(SearchField.Text);
+                Debug.WriteLine($"Queried {SearchField.Text}. Got {result.Item2} results.");
+                foreach (var image in result.Item1)
+                {
+                    _results.Add(image);
+                }
+                _lastPage = 0;
+                _lastQuery = SearchField.Text;
+
+                IsPrimaryButtonEnabled = false;
+
+                if (result.Item2 > 0)
+                    SetHasResultsState();
+                else
+                    SetNoResultsState();
+
+                EvaluateShowMore(result.Item2);
             }
-
-            var result = await _lastRepository.Query(SearchField.Text);
-            foreach (var image in result.Item1)
-            {
-                _results.Add(image);
-            }
-            _lastPage = 0;
-
-            IsPrimaryButtonEnabled = false;
-            
-            if(result.Item2 > 0)
-                SetHasResultsState();
-            else
-                SetNoResultsState();
-
-            DisplayShowMore(result.Item2);
         }
 
         private async void SearchButton_Tapped(object sender, TappedRoutedEventArgs e)
@@ -147,7 +160,7 @@ namespace WebImageLibrary
         private void InvokeCancel()
         {
             Finished?.Invoke(this, new WebImageLibraryClosedEventArgs());
-        }        
+        }
 
         private void Results_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -173,27 +186,41 @@ namespace WebImageLibrary
             return tempFile;
         }
 
-        private async void MoreButton_OnClick(object sender, RoutedEventArgs e)
+        private void EvaluateShowMore(int totalCount)
         {
-            if (_lastRepository == null)
-            {
-                SetErrorState();
-                return;
-            }
-
-            var result = await _lastRepository.QueryPage(SearchField.Text, ++_lastPage);
-            foreach (var image in result.Item1)
-            {
-                _results.Add(image);
-            }            
-
-            DisplayShowMore(result.Item2);
+            _canShowMore = _results.Count < totalCount;
         }
 
-        private void DisplayShowMore(int totalCount)
+        private async void ResultsViewer_OnViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
         {
-            MoreButton.Visibility = _results.Count < totalCount ? Visibility.Visible : Visibility.Collapsed;
-            MoreCount.Text = "(" + (totalCount - _results.Count) + ")";
+            using (await _queryMutex.LockAsync())
+            {
+                if (!_canShowMore)
+                    return;
+
+                var scrollViewer = (ScrollViewer)sender;
+                if (Math.Abs(scrollViewer.VerticalOffset - scrollViewer.ScrollableHeight) > TOLERANCE)
+                    return;
+
+                if (_lastRepository == null)
+                {
+                    SetErrorState();
+                    return;
+                }
+                LoadingMoreIndicator.Visibility = Visibility.Visible;
+
+                var result = await _lastRepository.QueryPage(_lastQuery, ++_lastPage);
+                Debug.WriteLine(
+                    $"Added entries for {_lastQuery} (page {_lastPage}). Got {result.Item1.Count()} entries.");
+                foreach (var image in result.Item1)
+                {
+                    _results.Add(image);
+                }
+
+                LoadingMoreIndicator.Visibility = Visibility.Collapsed;
+
+                EvaluateShowMore(result.Item2);
+            }
         }
     }
 }
