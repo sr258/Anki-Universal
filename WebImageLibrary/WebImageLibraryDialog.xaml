@@ -20,32 +20,48 @@
         </Grid.RowDefinitions>
         <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="SearchField" PlaceholderText="enter search text here" KeyUp="SearchField_KeyUp"></TextBox>
-            <Button x:Name="SearchButton" Grid.Column="1" Tapped="SearchButton_Tapped" Click="SearchButton_Click" Margin="4,0,0,0">
+            <ComboBox x:Name="SearchProvider" Margin="0,0,4,0">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <Image Source="{Binding SourceImageURL}" MaxHeight="48" MaxWidth="80"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <TextBox x:Name="SearchField" Grid.Column="1" PlaceholderText="enter search text here" KeyUp="SearchField_KeyUp"></TextBox>
+            <Button x:Name="SearchButton" Grid.Column="2" Tapped="SearchButton_Tapped" Click="SearchButton_Click" Margin="4,0,0,0">
                 <SymbolIcon Symbol="Find"/>
             </Button>
         </Grid>
-        <ProgressRing x:Name="ProgressIndicator" Grid.Row="1" IsActive="True"/>
-        <StackPanel x:Name="NoResultsLabel" Grid.Row="1" Orientation="Horizontal"  HorizontalAlignment="Center">
+        <ProgressRing x:Name="ProgressIndicator" Grid.Row="1" IsActive="True" Margin="0,18,0,0"/>
+        <StackPanel x:Name="NoResultsLabel" Grid.Row="1" Orientation="Horizontal"  HorizontalAlignment="Center" Margin="0,18,0,0">
             <SymbolIcon Symbol="Clear" Foreground="Red" Margin="0,0,4,0"/>
             <TextBlock VerticalAlignment="Center">no images found</TextBlock>
         </StackPanel>
         <ScrollViewer x:Name="ResultsViewer" Grid.Row="1" HorizontalScrollBarVisibility="Hidden" HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Auto">
-            <ListBox x:Name="Results" HorizontalAlignment="Stretch" SelectionChanged="Results_OnSelectionChanged">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <controls:WrapPanel MaxWidth="480"/>
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Image MaxWidth="120" MaxHeight="120" Source="{Binding SmallURL}"/>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+            <StackPanel>
+                <ListBox x:Name="Results" HorizontalAlignment="Stretch" SelectionChanged="Results_OnSelectionChanged" 
+                         ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                         ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.HorizontalScrollMode="Disabled">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <controls:WrapPanel MaxWidth="480"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Image MaxWidth="120" MaxHeight="120" Source="{Binding SmallURL}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <StackPanel Orientation="Horizontal" x:Name="MoreButton" HorizontalAlignment="Center">
+                    <HyperlinkButton Content="show more" Click="MoreButton_OnClick" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="MoreCount" VerticalAlignment="Center" Margin="4,0,0,0"/>
+                </StackPanel>
+            </StackPanel>
         </ScrollViewer>
     </Grid>
 </ContentDialog>

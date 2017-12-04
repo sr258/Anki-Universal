@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -25,11 +26,17 @@ namespace WebImageLibrary
     public sealed partial class WebImageLibraryDialog : ContentDialog
     {
         private readonly IEnumerable<IWebRepository> _webRepositories = RepositoryDirectory.GetWebRepositories();
+        private IWebRepository _lastRepository = null;
+        private int _lastPage = 0;
+        private readonly ObservableCollection<IRepositoryImage> _results = new ObservableCollection<IRepositoryImage>();
 
         public WebImageLibraryDialog()
         {
             InitializeComponent();
+            SearchProvider.ItemsSource = _webRepositories;
+            SearchProvider.SelectedIndex = 0;
             SetStartState();
+            Results.ItemsSource = _results;
         }
 
         private void SetStartState()
@@ -58,6 +65,13 @@ namespace WebImageLibrary
             ProgressIndicator.Visibility = Visibility.Collapsed;
             ResultsViewer.Visibility = Visibility.Collapsed;
             NoResultsLabel.Visibility = Visibility.Visible;
+        }
+
+        private void SetErrorState()
+        {
+            ProgressIndicator.Visibility = Visibility.Collapsed;
+            ResultsViewer.Visibility = Visibility.Collapsed;
+            NoResultsLabel.Visibility = Visibility.Collapsed;
         }
 
         private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
@@ -89,14 +103,29 @@ namespace WebImageLibrary
         private async Task Search()
         {
             SetSearchingState();
-            var result = await _webRepositories.First().Query(SearchField.Text);
-            Results.ItemsSource = result;
+            _results.Clear();
+            _lastRepository = (SearchProvider.SelectedItem as IWebRepository);
+            if (_lastRepository == null)
+            {
+                SetErrorState();
+                return;
+            }
+
+            var result = await _lastRepository.Query(SearchField.Text);
+            foreach (var image in result.Item1)
+            {
+                _results.Add(image);
+            }
+            _lastPage = 0;
+
             IsPrimaryButtonEnabled = false;
             
-            if(result.Any())
+            if(result.Item2 > 0)
                 SetHasResultsState();
             else
                 SetNoResultsState();
+
+            DisplayShowMore(result.Item2);
         }
 
         private async void SearchButton_Tapped(object sender, TappedRoutedEventArgs e)
@@ -142,6 +171,29 @@ namespace WebImageLibrary
             var data = await client.GetByteArrayAsync(uri);
             await FileIO.WriteBytesAsync(tempFile, data);
             return tempFile;
+        }
+
+        private async void MoreButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (_lastRepository == null)
+            {
+                SetErrorState();
+                return;
+            }
+
+            var result = await _lastRepository.QueryPage(SearchField.Text, ++_lastPage);
+            foreach (var image in result.Item1)
+            {
+                _results.Add(image);
+            }            
+
+            DisplayShowMore(result.Item2);
+        }
+
+        private void DisplayShowMore(int totalCount)
+        {
+            MoreButton.Visibility = _results.Count < totalCount ? Visibility.Visible : Visibility.Collapsed;
+            MoreCount.Text = "(" + (totalCount - _results.Count) + ")";
         }
     }
 }

@@ -8,8 +8,8 @@ namespace WebImageLibrary.WebRepositories
 {
     internal interface IWebRepository
     {
-        Task<IEnumerable<IRepositoryImage>> Query(string query);
-        Task<IEnumerable<IRepositoryImage>> QueryPage(string query, int pageNr);
+        Task<Tuple<IEnumerable<IRepositoryImage>, int>> Query(string query);
+        Task<Tuple<IEnumerable<IRepositoryImage>, int>> QueryPage(string query, int pageNr);
 
         string SourceReference { get; }
         string SourceURL { get; }

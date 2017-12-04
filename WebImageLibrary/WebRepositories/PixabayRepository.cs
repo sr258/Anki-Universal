@@ -21,15 +21,15 @@ namespace WebImageLibrary.WebRepositories
             _pixabaySharpClient = new PixabaySharpClient(apiKey);
         }
 
-        public async Task<IEnumerable<IRepositoryImage>> Query(string query)
+        public async Task<Tuple<IEnumerable<IRepositoryImage>, int>> Query(string query)
         {
             return await QueryPage(query, 1);
         }
 
-        public async Task<IEnumerable<IRepositoryImage>> QueryPage(string query, int pageNr)
+        public async Task<Tuple<IEnumerable<IRepositoryImage>, int>> QueryPage(string query, int pageNr)
         {
             if (String.IsNullOrEmpty(query))
-                return new List<IRepositoryImage>();
+                return Tuple.Create(new List<IRepositoryImage>() as IEnumerable<IRepositoryImage>, 0);
             try
             {
                 Debug.WriteLine($"querying for {query}...");
@@ -41,9 +41,9 @@ namespace WebImageLibrary.WebRepositories
                 });
 
                 if (result == null || result.Images == null || !result.Images.Any())
-                    return new List<IRepositoryImage>();
+                    return Tuple.Create(new List<IRepositoryImage>() as IEnumerable<IRepositoryImage>, 0);
 
-                return result.Images.Select(i => new PixabayImage()
+                return Tuple.Create(result.Images.Select(i => new PixabayImage()
                 {
                     Author = i.User,
                     HighResURL = i.FullHDImageURL,
@@ -52,11 +52,12 @@ namespace WebImageLibrary.WebRepositories
                     Licence = "CC0 Creative Commons",
                     SourceURL = i.PageURL,
                     Title = i.Tags
-                });
+                }) as IEnumerable<IRepositoryImage>,
+                result.TotalHits);
             }
             catch (Exception e)
             {
-                return new List<IRepositoryImage>();
+                return Tuple.Create(new List<IRepositoryImage>() as IEnumerable<IRepositoryImage>, 0);
             }
         }
 
