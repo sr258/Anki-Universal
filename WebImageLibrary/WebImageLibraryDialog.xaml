@@ -53,6 +53,11 @@
                 <ListBox x:Name="Results" HorizontalAlignment="Stretch" SelectionChanged="Results_OnSelectionChanged" 
                          ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                          ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.HorizontalScrollMode="Disabled">
+                    <ListBox.ItemContainerTransitions>
+                        <TransitionCollection>
+                            <AddDeleteThemeTransition/>
+                        </TransitionCollection>
+                    </ListBox.ItemContainerTransitions>
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <controls:WrapPanel MaxWidth="490"/>
@@ -61,8 +66,7 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Border Width="120" Height="120">
-                                <Image MaxWidth="120" MaxHeight="120" Source="{Binding SmallURL}"
-                                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                <Image MaxWidth="120" MaxHeight="120" Source="{Binding SmallURL}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                             </Border>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
