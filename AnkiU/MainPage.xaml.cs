@@ -683,7 +683,7 @@ namespace AnkiU
                     UserPrefs.LastAppVer = MainPage.APP_VER;
                     BackgroundTaskHelper.UnRegisterBackgroundTasks();
                 }
-                await BackgroundTaskHelper.RegisterBackgroundTasks();
+                //await BackgroundTaskHelper.RegisterBackgroundTasks(); // TODO: DISABLED FOR TESTING PURPOSES ONLY!
                 ToastHelper.MarkAlreadyShown();
             }
             catch (Exception ex)

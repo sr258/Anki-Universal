@@ -21,7 +21,7 @@
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
     <Win32Resource>MyResources.res</Win32Resource>
-    <PackageCertificateThumbprint>60F936F34C929C1A33C330D94CFCC4629D3B2A6A</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>93422528B4B65387E285345A6E15E3D0BDA810AD</PackageCertificateThumbprint>
     <RuntimeIdentifiers>win10-arm;win10-arm-aot;win10-x86;win10-x86-aot;win10-x64;win10-x64-aot</RuntimeIdentifiers>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
@@ -226,6 +226,7 @@
     <Content Include="html\tinymce\skins\lightgray\fonts\tinymce.json" />
     <Content Include="html\tinymce\skins\lightgray\fonts\tinymce.ttf" />
     <Content Include="html\tinymce\skins\lightgray\fonts\tinymce.woff" />
+    <None Include="AnkiU_TemporaryKey.pfx" />
     <None Include="MyResources.res" />
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
