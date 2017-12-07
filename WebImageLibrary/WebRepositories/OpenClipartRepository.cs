@@ -43,7 +43,7 @@ namespace WebImageLibrary.WebRepositories
                         HighResURL = i.ImageLinks.Png2400px,
                         MediumURL = i.ImageLinks.PngFullLossy,
                         SmallURL = i.ImageLinks.PngThumb,
-                        Licence = "Public Domain",
+                        Licence = "CC0 1.0 Universal (CC0 1.0)",
                         SourceURL = i.DetailLink,
                         Title = i.Title
                     }) as IEnumerable<IRepositoryImage>,
