@@ -29,6 +29,7 @@ namespace WebImageLibrary
     public sealed partial class WebImageLibraryDialog : ContentDialog
     {
         private const double TOLERANCE = 0.00001d;
+        private const int PAGESIZE = 24;
 
         private readonly IEnumerable<IWebRepository> _webRepositories = RepositoryDirectory.GetWebRepositories();
         private IWebRepository _lastRepository = null;
@@ -123,7 +124,7 @@ namespace WebImageLibrary
                     return;
                 }
 
-                var result = await _lastRepository.Query(SearchField.Text);
+                var result = await _lastRepository.Query(SearchField.Text, PAGESIZE);
                 Debug.WriteLine($"Queried {SearchField.Text}. Got {result.Item2} results.");
                 foreach (var image in result.Item1)
                 {
@@ -214,7 +215,7 @@ namespace WebImageLibrary
                 }
                 LoadingMoreIndicator.Visibility = Visibility.Visible;
 
-                var result = await _lastRepository.QueryPage(_lastQuery, ++_lastPage);
+                var result = await _lastRepository.QueryPage(_lastQuery, PAGESIZE, ++_lastPage);
                 Debug.WriteLine(
                     $"Added entries for {_lastQuery} (page {_lastPage}). Got {result.Item1.Count()} entries.");
                 foreach (var image in result.Item1)

@@ -17,12 +17,12 @@ namespace WebImageLibrary.WebRepositories
             _repository = repository;
         }
 
-        public Task<Tuple<IEnumerable<IRepositoryImage>, int>> Query(string query)
+        public Task<Tuple<IEnumerable<IRepositoryImage>, int>> Query(string query, int pageSize)
         {
-            return QueryPage(query, 1);
+            return QueryPage(query, pageSize, 1);
         }
 
-        public async Task<Tuple<IEnumerable<IRepositoryImage>, int>> QueryPage(string query, int pageNr)
+        public async Task<Tuple<IEnumerable<IRepositoryImage>, int>> QueryPage(string query, int pageSize, int pageNr)
         {
             var cacheId = query + "-" + pageNr;
             Tuple<IEnumerable<IRepositoryImage>, int> value;
@@ -31,7 +31,7 @@ namespace WebImageLibrary.WebRepositories
                 return value;
             }
 
-            value = await _repository.QueryPage(query, pageNr);
+            value = await _repository.QueryPage(query, pageSize, pageNr);
             _cache.Add(cacheId, value);
             return value;
         }

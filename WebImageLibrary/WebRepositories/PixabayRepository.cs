@@ -21,12 +21,12 @@ namespace WebImageLibrary.WebRepositories
             _pixabaySharpClient = new PixabaySharpClient(apiKey);
         }
 
-        public async Task<Tuple<IEnumerable<IRepositoryImage>, int>> Query(string query)
+        public async Task<Tuple<IEnumerable<IRepositoryImage>, int>> Query(string query, int pageSize)
         {
-            return await QueryPage(query, 1);
+            return await QueryPage(query, pageSize, 1);
         }
 
-        public async Task<Tuple<IEnumerable<IRepositoryImage>, int>> QueryPage(string query, int pageNr)
+        public async Task<Tuple<IEnumerable<IRepositoryImage>, int>> QueryPage(string query, int pageSize, int pageNr)
         {
             if (String.IsNullOrEmpty(query))
                 return Tuple.Create(new List<IRepositoryImage>() as IEnumerable<IRepositoryImage>, 0);
@@ -37,13 +37,14 @@ namespace WebImageLibrary.WebRepositories
                     ImageType = ImageType.Illustration | ImageType.Vector,
                     Query = query,
                     Page = pageNr,
-                    Order = Order.Popular
+                    Order = Order.Popular,
+                    PerPage = pageSize
                 });
 
                 if (result == null || result.Images == null || !result.Images.Any())
                     return Tuple.Create(new List<IRepositoryImage>() as IEnumerable<IRepositoryImage>, 0);
 
-                return Tuple.Create(result.Images.Select(i => new PixabayImage()
+                return Tuple.Create(result.Images.Select(i => new BaseImage()
                 {
                     Author = i.User,
                     HighResURL = i.FullHDImageURL,

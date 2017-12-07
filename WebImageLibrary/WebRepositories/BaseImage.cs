@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebImageLibrary.WebRepositories
 {
-    internal class PixabayImage : IRepositoryImage
+    internal class BaseImage : IRepositoryImage
     {
         public string SmallURL { get; set; }
         public string MediumURL { get; set; }

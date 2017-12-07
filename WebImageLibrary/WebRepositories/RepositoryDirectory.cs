@@ -12,7 +12,8 @@ namespace WebImageLibrary.WebRepositories
         {
             return new List<IWebRepository>()
             {
-                new MemoryCachedRepository(new PixabayRepository("3741913-00f7fa69ee5cead32bb590d1b"))
+                new MemoryCachedRepository(new PixabayRepository("3741913-00f7fa69ee5cead32bb590d1b")),
+                new MemoryCachedRepository(new OpenClipartRepository()),
             };
         }
     }
