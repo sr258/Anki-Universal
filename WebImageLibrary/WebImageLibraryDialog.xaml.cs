@@ -143,6 +143,8 @@ namespace WebImageLibrary
                 else
                     SetNoResultsState();
 
+                ResultsViewer.ChangeView(0.0d, 0.0d, 1.0f);
+
                 EvaluateShowMore(result.Item2);                
             }
         }
